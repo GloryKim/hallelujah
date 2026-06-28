@@ -222,7 +222,7 @@ For **learning and experimentation**, keeping multiple example folders and rotat
 
 #### 6) WebView vs localhost loading
 
-- Depending on whether the WebView loads `https://tauri.localhost` (bundled assets) or `http://127.0.0.1:<port>` (served by Axum), behavior differs for:
+- Depending on whether the WebView loads the bundled Tauri asset origin or `http://127.0.0.1:<port>` (served by Axum), behavior differs for:
   - HMR (hot reload)
   - WebSocket
   - mixed content

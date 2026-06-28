@@ -49,6 +49,8 @@ When changing sidecar behavior, keep these files in sync:
 
 Run `pnpm generate` after registry edits and include the generated files in the same commit.
 
+Note: `pnpm generate` updates generated Rust/TypeScript registry artifacts, but the hand-written client base URLs in `packages/api-client/src/*.ts` still need manual updates when a port changes.
+
 ---
 
 ## Current Sidecars

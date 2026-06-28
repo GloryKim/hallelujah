@@ -42,6 +42,8 @@
 
 Example values for `service`: `"gin"`, `"express"`, `"fastapi"`, `"nest"`, `"axum"`.
 
+This `service` field is the **service key**. It intentionally differs from the Rust runtime ID / binary name, which use values like `sc-gin`.
+
 ---
 
 ## 3. CORS Requirements
@@ -71,13 +73,15 @@ Sidecars must not hardcode ports in production code except as dev fallbacks.
 
 ## 5. Graceful Shutdown
 
-Sidecars should handle `SIGTERM` and `SIGINT`:
+Sidecars should handle `SIGTERM` and `SIGINT` when those signals are delivered:
 
 - Go: `signal.Notify` + `http.Server.Shutdown`
 - Node: `process.on("SIGTERM", ...)` + `server.close()`
 - Python: uvicorn lifecycle / signal handlers
 - Nest: `app.close()` on SIGTERM
 - Rust: `axum::serve(...).with_graceful_shutdown(...)`
+
+Current caveat: the desktop shell does not yet retain child handles and explicitly send `SIGTERM` on app exit. In production today, process cleanup primarily relies on OS reclamation.
 
 ---
 
@@ -103,15 +107,15 @@ The current TypeScript clients in `packages/api-client/` are hand-written, but t
 1. Update `packages/contracts/ports.yaml` if the service name, port, health path, or binary name changes.
 2. Update `packages/contracts/openapi/<service>.yaml` when endpoint shapes change.
 3. Run `pnpm generate` after port registry changes.
-4. Update `packages/api-client/src/<service>.ts` if the React app consumes the changed endpoint.
+4. Update `packages/api-client/src/<service>.ts` if the React app consumes the changed endpoint, and update its hardcoded `BASE` URL manually if the port changed.
 5. Verify the sidecar still returns `200 OK` from `/health` and a stable `{ service, version }` payload from `/meta`.
 
 ---
 
 ## 7. Compliance Matrix
 
-| Sidecar | /health | /meta | CORS | SIDECAR_PORT | Graceful shutdown |
-|---------|---------|-------|------|--------------|-----------------|
+| Sidecar | /health | /meta | CORS | SIDECAR_PORT | Signal handlers implemented |
+|---------|---------|-------|------|--------------|-----------------------------|
 | gin | ✅ | ✅ | ✅ | ✅ | ✅ |
 | express | ✅ | ✅ | ✅ | ✅ | ✅ |
 | fastapi | ✅ | ✅ | ✅ | ✅ | ✅ |

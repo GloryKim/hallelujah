@@ -71,6 +71,8 @@ export type SidecarId = keyof typeof SIDECAR_PORTS;
 
 Exported from `index.ts` for use in the desktop app and future packages.
 
+`pnpm generate` updates `constants.ts`, but it does not rewrite the hardcoded `BASE` values inside `gin.ts`, `express.ts`, `fastapi.ts`, `nest.ts`, or `axum.ts`.
+
 ---
 
 ## 4. Usage in the Desktop App
@@ -92,7 +94,7 @@ The Data Flow Monitor (`lib/sidecars.ts`) maps each `SidecarId` to its client fo
 
 1. Add port entry to `packages/contracts/ports.yaml`.
 2. Run `pnpm generate`.
-3. Create `packages/api-client/src/{name}.ts` following the existing pattern.
+3. Create `packages/api-client/src/{name}.ts` following the existing pattern, including the service's `BASE` URL.
 4. Export from `index.ts`.
 5. Add to `SIDECAR_CONFIG` in `apps/desktop/src/lib/sidecars.ts`.
 
@@ -101,7 +103,7 @@ The Data Flow Monitor (`lib/sidecars.ts`) maps each `SidecarId` to its client fo
 ## 6. Design Notes
 
 - Clients use **native `fetch`** — no axios dependency.
-- Base URLs are hardcoded per client (port from registry at generation time). Consider generating clients from `ports.yaml` in the future to avoid drift.
+- Base URLs are currently hardcoded per client. `pnpm generate` does not update them yet, so port changes still require manual edits in each client module.
 - All requests target `127.0.0.1` only — appropriate for local sidecars, not remote APIs.
 
 ---

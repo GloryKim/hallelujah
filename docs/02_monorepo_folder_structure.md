@@ -1,7 +1,7 @@
 # Tauri + Multi-Sidecar Monorepo Folder Structure Guide
 
 > Date: 2026-06-28  
-> Audience: A project where a Tauri desktop app communicates with **continuously growing sidecars** such as Go (Gin), JS (Express), Python (FastAPI), and TS (NestJS + React)
+> Audience: A project where a Tauri desktop app communicates with **continuously growing sidecars** such as Go (Gin), JS (Express), Python (FastAPI), TS (NestJS + React), and Rust (Axum)
 
 ---
 
@@ -58,7 +58,8 @@ hallelujah/
 │               ├── sc-gin-{target-triple}
 │               ├── sc-express-{target-triple}
 │               ├── sc-fastapi-{target-triple}
-│               └── sc-nest-{target-triple}
+│               ├── sc-nest-{target-triple}
+│               └── sc-axum-{target-triple}
 │
 ├── services/                         # per-language sidecar source (keep adding)
 │   ├── gin/                          # Go + Gin
@@ -84,13 +85,20 @@ hallelujah/
 │   │   └── scripts/
 │   │       └── build-sidecar.sh      # PyInstaller, etc.
 │   │
-│   └── nest/                         # NestJS (+ optional React admin)
-│       ├── package.json
-│       ├── apps/
-│       │   ├── api/                  # NestJS API (sidecar core)
-│       │   └── admin-web/            # Nest-specific React (optional)
-│       └── scripts/
-│           └── build-sidecar.mjs
+│   ├── nest/                         # NestJS (+ optional React admin)
+│   │   ├── package.json
+│   │   ├── apps/
+│   │   │   ├── api/                  # NestJS API (sidecar core)
+│   │   │   └── admin-web/            # Nest-specific React (optional)
+│   │   └── scripts/
+│   │       └── build-sidecar.mjs
+│   │
+│   └── axum/                         # Rust + Axum
+│       ├── Cargo.toml
+│       ├── src/
+│       │   └── main.rs
+│       ├── scripts/
+│       └── Makefile
 │
 ├── packages/
 │   ├── contracts/                    # shared contracts
@@ -99,7 +107,8 @@ hallelujah/
 │   │   │   ├── gin.yaml
 │   │   │   ├── express.yaml
 │   │   │   ├── fastapi.yaml
-│   │   │   └── nest.yaml
+│   │   │   ├── nest.yaml
+│   │   │   └── axum.yaml
 │   │   └── README.md
 │   │
 │   └── api-client/                   # (optional) OpenAPI → TS client output
@@ -116,8 +125,10 @@ hallelujah/
 │   └── check-ports.mjs               # port conflict checks
 │
 ├── docs/
-│   ├── monorepo-folder-structure.md  # this document
-│   └── tauri-learning-stack-report.md
+│   ├── readme.md
+│   ├── 01_tauri_learning_stack_report.md
+│   ├── 02_monorepo_folder_structure.md  # this document
+│   └── ...
 │
 ├── .github/
 │   └── workflows/
@@ -139,13 +150,13 @@ hallelujah/
 **What it does**
 
 - User UI (React + TypeScript)
-- Sidecar process **start, stop, restart**
-- Sidecar cleanup on app exit (graceful shutdown)
+- Sidecar process **start** and health checking
+- Coordination between dev-mode source sidecars and production binaries
 - (Optional) OS-native features via Rust `#[tauri::command]`
 
 **What it does not do**
 
-- Duplicate Gin/Express/FastAPI/Nest business logic in Rust
+- Duplicate Gin/Express/FastAPI/Nest/Axum business logic in Rust
 
 ```
 apps/desktop/src-tauri/src/sidecar/
@@ -164,7 +175,8 @@ apps/desktop/src-tauri/src/sidecar/
       "binaries/sc-gin",
       "binaries/sc-express",
       "binaries/sc-fastapi",
-      "binaries/sc-nest"
+      "binaries/sc-nest",
+      "binaries/sc-axum"
     ]
   }
 }
@@ -184,6 +196,7 @@ Whenever you add a new stack, **always follow the same pattern**.
 | `express` | `services/express/` | Node + Express | 7102 |
 | `fastapi` | `services/fastapi/` | Python + FastAPI | 7103 |
 | `nest` | `services/nest/` | NestJS (+ React admin) | 7104 |
+| `axum` | `services/axum/` | Rust + Axum | 7105 |
 
 #### Shared sidecar contract (required for all services)
 
@@ -192,7 +205,7 @@ GET /health          → 200 { "ok": true }
 GET /meta            → 200 { "service": "gin", "version": "0.1.0" }
 Bind address         → 127.0.0.1 only
 Port                 → env var SIDECAR_PORT (default from ports.yaml)
-Shutdown             → graceful shutdown on SIGTERM
+Shutdown             → sidecars may implement SIGTERM/SIGINT handlers, but the Tauri shell currently relies on OS cleanup on app exit
 ```
 
 With this contract in place, Tauri `sidecar/health.rs` works **language-agnostically**.
@@ -277,7 +290,7 @@ services/nest/
 
 As sidecars grow, **this folder becomes the most important**.
 
-#### `ports.yaml` (single source of truth)
+#### `ports.yaml` (source of truth for generated sidecar metadata)
 
 ```yaml
 services:
@@ -304,14 +317,21 @@ services:
     port: 7104
     healthPath: /health
     binaryName: sc-nest
+
+  axum:
+    id: sc-axum
+    port: 7105
+    healthPath: /health
+    binaryName: sc-axum
 ```
 
-- When adding a sidecar, **add one entry here** → scripts generate TS/Rust constants
-- Keep port ranges separate from Vite dev server `5173`, Axum (if used later) `7000`, etc. (`7100` range = sidecars)
+- When adding a sidecar, **add one entry here** → `pnpm generate` updates generated TS/Rust constants.
+- `ports.yaml` does **not** fully wire in a new service by itself; `scripts/dev.sh`, `scripts/build-sidecars.sh`, Tauri config, capabilities, and hand-written API clients still need manual updates.
+- Keep port ranges separate from Vite dev server `5173` and other local servers (`7100` range = sidecars).
 
 #### `openapi/<service>.yaml`
 
-- Auto-generate frontend `packages/api-client`
+- Review contract for frontend clients today; can support generated clients later
 - Sidecar teams update the contract first when APIs change
 
 ---
@@ -332,10 +352,11 @@ In `apps/desktop`:
 ```typescript
 import { ginClient } from "@hallelujah/api-client";
 
-const res = await ginClient.getUser(1);
+const health = await ginClient.health();
+const meta = await ginClient.meta();
 ```
 
-Even with 10 sidecars, UI code only needs to import **client modules**.
+Even with 10 sidecars, UI code only needs to import **client modules**. The current clients are hand-written wrappers, not fully generated SDKs.
 
 ---
 
@@ -352,11 +373,11 @@ Even with 10 sidecars, UI code only needs to import **client modules**.
 └─────────┼──────────────────────────────────┼────────────┘
           │                                  │
           ▼                                  ▼
-   ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐
-   │ gin:7101   │  │ express    │  │ fastapi    │  │ nest:7104  │
-   │            │  │ :7102      │  │ :7103      │  │            │
-   └────────────┘  └────────────┘  └────────────┘  └────────────┘
-        services/gin   services/express  services/fastapi  services/nest
+   ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌────────────┐
+   │ gin:7101   │  │ express    │  │ fastapi    │  │ nest:7104  │  │ axum:7105  │
+   │            │  │ :7102      │  │ :7103      │  │            │  │            │
+   └────────────┘  └────────────┘  └────────────┘  └────────────┘  └────────────┘
+   services/gin   services/express  services/fastapi  services/nest  services/axum
 ```
 
 - **UI → Sidecar:** `fetch("http://127.0.0.1:7101/...")` (or api-client)
@@ -372,12 +393,15 @@ Even with 10 sidecars, UI code only needs to import **client modules**.
 Example `scripts/dev.sh` flow:
 
 1. Load `ports.yaml`
-2. Start each `services/*` in **source mode** in the background  
-   - Go: `go run ./cmd/server`  
-   - Express: `pnpm --filter express dev`  
-   - FastAPI: `uvicorn ...`  
+2. Start each `services/*` in **source mode** in the background
+   - Go: `go run ./cmd/server`
+   - Express: `pnpm --filter express dev`
+   - FastAPI: `uvicorn ...`
    - Nest: `pnpm --filter nest-api dev`
+   - Axum: `cargo run`
 3. Run `pnpm tauri dev` in `apps/desktop`
+
+The registered ports come from `ports.yaml`, but the startup command list is still maintained manually in `scripts/dev.sh`.
 
 At this stage you can develop without `binaries/` (shorter build cycle).
 
@@ -401,7 +425,7 @@ When adding a new stack (e.g. Rust Actix, Elixir):
 - [ ] Implement `GET /health` and `127.0.0.1` binding
 - [ ] Add to `apps/desktop/src-tauri/tauri.conf.json` → `externalBin`
 - [ ] Add shell spawn permission in `apps/desktop/src-tauri/capabilities/`
-- [ ] Add entry to `apps/desktop/src-tauri/src/sidecar/registry.rs` (or auto-generate from yaml)
+- [ ] Run `pnpm generate` to regenerate `apps/desktop/src-tauri/src/sidecar/registry.rs` (do not edit it manually)
 - [ ] Add target to `scripts/dev.sh` and `scripts/build-sidecars.sh`
 - [ ] Add client to `packages/api-client`
 - [ ] Add build job to CI workflow

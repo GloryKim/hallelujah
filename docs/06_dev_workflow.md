@@ -49,6 +49,8 @@ Press **Ctrl+C** once to stop Tauri and all sidecars.
 | nest | `SIDECAR_PORT=7104 pnpm --filter nest-api dev` |
 | axum | `SIDECAR_PORT=7105 cargo run` |
 
+The service command list is still maintained manually in `scripts/dev.sh`; `ports.yaml` provides the ports, but it does not auto-register new services in the startup script.
+
 ### FastAPI dependency bootstrap
 
 If `uvicorn` is not importable, dev.sh runs:
@@ -114,4 +116,4 @@ make gin | express | fastapi | nest | axum   # individual sidecar build
 [sidecar] spawn skipped (TAURI_SKIP_SIDECAR_SPAWN)
 ```
 
-If `all sidecars ready` never appears, see `11_troubleshooting.md`.
+If `all sidecars ready` never appears, see [`12_troubleshooting.md`](./12_troubleshooting.md).

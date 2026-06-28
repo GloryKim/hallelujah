@@ -122,4 +122,6 @@ Real servers run from source; placeholders only satisfy the Tauri build check.
 
 ## 7. Shutdown
 
-On app exit, child sidecar processes are reclaimed by the OS. A production app may store child handles and send `SIGTERM` explicitly — currently documented as a future improvement in `spawn.rs`.
+Many sidecars implement `SIGTERM` / `SIGINT` handlers themselves, but the Tauri shell currently does **not** retain child handles and does not explicitly send those signals on app exit.
+
+Today, child sidecar processes are reclaimed by the OS. A production app may store child handles and send `SIGTERM` explicitly — currently documented as a future improvement in `spawn.rs`.

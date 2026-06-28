@@ -1,7 +1,7 @@
 # Sidecar Port Registry and Code Generation
 
 > Date: 2026-06-28  
-> Scope: `packages/contracts/ports.yaml` as the single source of truth for sidecar metadata
+> Scope: `packages/contracts/ports.yaml` as the source of truth for generated sidecar metadata
 
 ---
 
@@ -9,12 +9,13 @@
 
 Every sidecar must agree on:
 
-- **ID** — logical name used in logs and health results
+- **Service key** — logical name used in frontend config and `/meta` payloads (`gin`, `express`, ...)
+- **Runtime ID** — identifier used by the Rust registry and sidecar spawn logs (`sc-gin`, `sc-express`, ...)
 - **Port** — localhost bind port
 - **Health path** — endpoint Tauri uses for readiness probes
 - **Binary name** — Tauri `externalBin` base name (without target triple suffix)
 
-These values live in one file so Rust, TypeScript, and shell scripts stay in sync.
+These values live in one file so generated Rust/TypeScript metadata and port-based helper scripts stay in sync. Service startup/build wiring and per-client `BASE` URLs are still maintained manually.
 
 ---
 
@@ -38,6 +39,14 @@ services:
 
   # ... fastapi (7103), nest (7104), axum (7105)
 ```
+
+### Naming map
+
+| Concept | Example | Used by |
+|---------|---------|---------|
+| Service key | `gin` | `SIDECAR_PORTS.gin`, `/meta.service`, UI config |
+| Runtime ID | `sc-gin` | Rust `SIDECARS`, spawn logs, placeholder binaries |
+| Binary name | `sc-gin` | Tauri `externalBin`, packaged artifact base name |
 
 ### Port allocation
 
@@ -69,6 +78,8 @@ pnpm generate
 | `packages/api-client/src/constants.ts` | `SIDECAR_PORTS` and `SidecarId` type for the frontend |
 | `apps/desktop/src-tauri/src/sidecar/registry.rs` | `SIDECARS` slice for Rust spawn and health checks |
 
+The generator does **not** rewrite the hardcoded `BASE` URLs in `packages/api-client/src/*.ts`; those client modules are still hand-maintained.
+
 ### Example generated Rust
 
 ```rust
@@ -96,8 +107,8 @@ export const SIDECAR_PORTS = {
 
 | Consumer | Usage |
 |----------|-------|
-| `scripts/dev.sh` | Parses ports to set `SIDECAR_PORT` per service |
-| `scripts/wait-for-sidecars.sh` | Health-check loop before Tauri starts |
+| `scripts/dev.sh` | Parses ports to set `SIDECAR_PORT` per service; the service command list itself is still manual |
+| `scripts/wait-for-sidecars.sh` | Health-check loop before Tauri starts; the service list is still manual |
 | `scripts/free-sidecar-ports.sh` | Kills listeners on registered ports |
 | `scripts/ensure-sidecar-binaries.sh` | Creates placeholder binaries per `binaryName` |
 | `scripts/check-ports.mjs` | Pre-flight check for port conflicts |
@@ -110,7 +121,7 @@ export const SIDECAR_PORTS = {
 1. Add an entry to `packages/contracts/ports.yaml` (pick the next free port).
 2. Run `pnpm generate`.
 3. Wire the new service into `dev.sh`, `build-sidecars.sh`, `tauri.conf.json`, and capabilities.
-4. Add an HTTP client in `packages/api-client/`.
+4. Add or update the HTTP client in `packages/api-client/`, including its manual `BASE` URL.
 5. Run `pnpm check:ports` to verify the port is free.
 6. Add `packages/contracts/openapi/<service>.yaml` with at least `/health` and `/meta`.
 7. Add or update CI coverage so the service is built or syntax-checked on pull requests.
@@ -123,6 +134,7 @@ After editing `ports.yaml`, verify these files change together:
 |------|-----------------|
 | `packages/api-client/src/constants.ts` | Port constants and `SidecarId` union |
 | `apps/desktop/src-tauri/src/sidecar/registry.rs` | Rust sidecar registry used by spawn and health checks |
+| `packages/api-client/src/<service>.ts` | Manual client `BASE` URL if a port changed, or a new client file if a service was added |
 | `apps/desktop/src-tauri/tauri.conf.json` | `externalBin` entry for production packaging |
 | `apps/desktop/src-tauri/capabilities/default.json` | Shell permission for the sidecar binary |
 

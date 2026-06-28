@@ -117,4 +117,4 @@ Repeat for ports 7102–7105.
 
 ## 6. Production Note
 
-When the frontend is bundled (not served from Vite), the origin changes (e.g. `tauri://localhost`). Sidecars that use `allow_origins: ["*"]` or `origin: true` continue to work. Tighten origins in production if sidecars ever bind beyond `127.0.0.1`.
+When the frontend is bundled (not served from Vite), the request origin changes from the Vite dev server to the bundled Tauri asset origin. Sidecars that use `allow_origins: ["*"]` or `origin: true` continue to work. Tighten origins in production if sidecars ever bind beyond `127.0.0.1`.
