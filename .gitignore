@@ -1,0 +1,38 @@
+# sidecar build artifacts — source stays in services/, artifacts go here only
+apps/desktop/src-tauri/binaries/*
+!apps/desktop/src-tauri/binaries/.gitkeep
+
+# per-language build outputs
+services/*/dist/
+services/*/build/
+services/*/__pycache__/
+services/*/node_modules/
+services/gin/sc-gin*
+services/gin/server
+
+# js/ts
+node_modules/
+*.tsbuildinfo
+dist/
+.cache/
+
+# rust
+target/
+
+# python
+.venv/
+*.pyc
+*.pyo
+__pycache__/
+*.egg-info/
+
+# tauri
+apps/desktop/src-tauri/gen/
+
+# env
+.env
+.env.local
+
+# os
+.DS_Store
+Thumbs.db

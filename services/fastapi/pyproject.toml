@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sc-fastapi"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.111.0",
+  "uvicorn[standard]>=0.30.0",
+]
+
+[tool.hatch.envs.default]
+dependencies = [
+  "pyinstaller>=6.0",
+]
+
+[tool.hatch.envs.default.scripts]
+dev = "uvicorn app.main:app --host 127.0.0.1 --port ${SIDECAR_PORT:-7103} --reload"
+start = "uvicorn app.main:app --host 127.0.0.1 --port ${SIDECAR_PORT:-7103}"
+build-sidecar = "bash scripts/build-sidecar.sh"

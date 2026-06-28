@@ -1,0 +1,96 @@
+name: Sidecars
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/**"
+      - "packages/contracts/**"
+  pull_request:
+    paths:
+      - "services/**"
+      - "packages/contracts/**"
+
+jobs:
+  gin:
+    name: Go (Gin)
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: services/gin
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+          cache-dependency-path: services/gin/go.sum
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Build
+        run: go build ./cmd/server
+
+  express:
+    name: Node (Express)
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install
+      - run: pnpm --filter express build
+
+  fastapi:
+    name: Python (FastAPI)
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: services/fastapi
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install deps
+        run: uv pip install --system fastapi uvicorn
+
+      - name: Syntax check
+        run: python -m py_compile app/main.py app/routers/health.py app/routers/meta.py
+
+  nest:
+    name: NestJS
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install
+      - run: pnpm --filter nest-api build

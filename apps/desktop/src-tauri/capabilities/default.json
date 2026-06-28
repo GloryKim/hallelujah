@@ -1,0 +1,19 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Default capability set for the main window",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        { "name": "sc-gin", "sidecar": true },
+        { "name": "sc-express", "sidecar": true },
+        { "name": "sc-fastapi", "sidecar": true },
+        { "name": "sc-nest", "sidecar": true }
+      ]
+    },
+    "shell:allow-kill"
+  ]
+}

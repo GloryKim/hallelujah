@@ -1,0 +1,11 @@
+{
+  "name": "nest-workspace",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "pnpm --filter nest-api dev",
+    "build": "pnpm --filter nest-api build",
+    "build:sidecar": "node scripts/build-sidecar.mjs"
+  }
+}

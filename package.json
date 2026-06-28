@@ -1,0 +1,20 @@
+{
+  "name": "hallelujah",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "./scripts/dev.sh",
+    "dev:desktop": "pnpm --filter desktop tauri dev",
+    "build:sidecars": "./scripts/build-sidecars.sh",
+    "build": "pnpm build:sidecars && pnpm --filter desktop tauri build",
+    "check:ports": "node scripts/check-ports.mjs",
+    "generate": "node tools/sidecar-registry/generate.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "js-yaml": "^4.1.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "@nestjs/core", "@nestjs/platform-express"]
+  }
+}

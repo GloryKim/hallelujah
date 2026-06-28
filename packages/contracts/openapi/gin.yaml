@@ -1,0 +1,46 @@
+openapi: "3.1.0"
+info:
+  title: sc-gin
+  version: "0.1.0"
+  description: Go + Gin sidecar API
+servers:
+  - url: http://127.0.0.1:7101
+paths:
+  /health:
+    get:
+      summary: Health check
+      operationId: getHealth
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /meta:
+    get:
+      summary: Service metadata
+      operationId: getMeta
+      responses:
+        "200":
+          description: Service metadata
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetaResponse"
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+    MetaResponse:
+      type: object
+      required: [service, version]
+      properties:
+        service:
+          type: string
+        version:
+          type: string

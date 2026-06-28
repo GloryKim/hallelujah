@@ -1,0 +1,24 @@
+services:
+  gin:
+    id: sc-gin
+    port: 7101
+    healthPath: /health
+    binaryName: sc-gin
+
+  express:
+    id: sc-express
+    port: 7102
+    healthPath: /health
+    binaryName: sc-express
+
+  fastapi:
+    id: sc-fastapi
+    port: 7103
+    healthPath: /health
+    binaryName: sc-fastapi
+
+  nest:
+    id: sc-nest
+    port: 7104
+    healthPath: /health
+    binaryName: sc-nest
