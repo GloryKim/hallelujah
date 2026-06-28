@@ -36,3 +36,6 @@ apps/desktop/src-tauri/gen/
 # os
 .DS_Store
 Thumbs.db
+
+# log
+.jsonl
