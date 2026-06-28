@@ -81,18 +81,30 @@ Sidecars should handle `SIGTERM` and `SIGINT`:
 
 ---
 
-## 6. Future: OpenAPI
+## 6. OpenAPI Contract Files
 
-`02_monorepo_folder_structure.md` recommends adding specs under:
+OpenAPI specs live under:
 
 ```
 packages/contracts/openapi/
 ├── gin.yaml
 ├── express.yaml
-└── ...
+├── fastapi.yaml
+├── nest.yaml
+└── axum.yaml
 ```
 
-Not yet implemented; clients are currently hand-written in `packages/api-client/`.
+Each spec should describe the same required baseline endpoints (`GET /health`, `GET /meta`) before service-specific endpoints are added. When a sidecar API changes, update the OpenAPI spec in the same change as the service implementation and the matching API client.
+
+The current TypeScript clients in `packages/api-client/` are hand-written, but the OpenAPI files are still the review contract. They make API drift visible and leave room for generated clients later.
+
+### Contract update checklist
+
+1. Update `packages/contracts/ports.yaml` if the service name, port, health path, or binary name changes.
+2. Update `packages/contracts/openapi/<service>.yaml` when endpoint shapes change.
+3. Run `pnpm generate` after port registry changes.
+4. Update `packages/api-client/src/<service>.ts` if the React app consumes the changed endpoint.
+5. Verify the sidecar still returns `200 OK` from `/health` and a stable `{ service, version }` payload from `/meta`.
 
 ---
 

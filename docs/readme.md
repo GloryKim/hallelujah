@@ -36,6 +36,21 @@ pnpm check:ports      # Verify ports 7101–7105 are free
 
 ---
 
+## Maintenance Checklist
+
+When changing sidecar behavior, keep these files in sync:
+
+| Change | Files to review |
+|--------|-----------------|
+| Port, binary name, or health path | `packages/contracts/ports.yaml`, generated Rust/TS registry files, Tauri `externalBin`, shell capabilities |
+| HTTP endpoint shape | `packages/contracts/openapi/<service>.yaml`, `packages/api-client/src/<service>.ts`, UI consumers |
+| New sidecar | `services/<name>/`, `ports.yaml`, OpenAPI spec, API client, dev/build scripts, Tauri config, CI workflow |
+| Production packaging | `scripts/build-sidecars.sh`, `apps/desktop/src-tauri/binaries/`, `.gitignore`, GitHub Actions |
+
+Run `pnpm generate` after registry edits and include the generated files in the same commit.
+
+---
+
 ## Current Sidecars
 
 | Service | Port | Stack | Binary |

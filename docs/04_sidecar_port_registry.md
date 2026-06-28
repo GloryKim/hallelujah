@@ -112,5 +112,20 @@ export const SIDECAR_PORTS = {
 3. Wire the new service into `dev.sh`, `build-sidecars.sh`, `tauri.conf.json`, and capabilities.
 4. Add an HTTP client in `packages/api-client/`.
 5. Run `pnpm check:ports` to verify the port is free.
+6. Add `packages/contracts/openapi/<service>.yaml` with at least `/health` and `/meta`.
+7. Add or update CI coverage so the service is built or syntax-checked on pull requests.
+
+### Registry drift checks
+
+After editing `ports.yaml`, verify these files change together:
+
+| File | Expected update |
+|------|-----------------|
+| `packages/api-client/src/constants.ts` | Port constants and `SidecarId` union |
+| `apps/desktop/src-tauri/src/sidecar/registry.rs` | Rust sidecar registry used by spawn and health checks |
+| `apps/desktop/src-tauri/tauri.conf.json` | `externalBin` entry for production packaging |
+| `apps/desktop/src-tauri/capabilities/default.json` | Shell permission for the sidecar binary |
+
+If the generated constants changed but `tauri.conf.json` or capabilities did not, production packaging may still miss the new sidecar even though dev mode works.
 
 See `02_monorepo_folder_structure.md` §6 for the full checklist.

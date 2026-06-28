@@ -94,3 +94,19 @@ jobs:
 
       - run: pnpm install
       - run: pnpm --filter nest-api build
+
+  axum:
+    name: Rust (Axum)
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: services/axum
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check
+        run: cargo check --locked
