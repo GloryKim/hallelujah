@@ -1,0 +1,38 @@
+[package]
+name = "tokio_example"
+version = "0.1.0"
+edition = "2021"
+description = "10 beginner Tokio examples — async/await, spawn, timer, channel"
+
+[dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time", "sync"] }
+
+[[example]]
+name = "01_hello_async"
+
+[[example]]
+name = "02_spawn_tasks"
+
+[[example]]
+name = "03_sleep_and_delay"
+
+[[example]]
+name = "04_join_macro"
+
+[[example]]
+name = "05_select_basics"
+
+[[example]]
+name = "06_interval"
+
+[[example]]
+name = "07_timeout"
+
+[[example]]
+name = "08_mpsc_channel"
+
+[[example]]
+name = "09_spawn_blocking"
+
+[[example]]
+name = "10_async_mutex"
