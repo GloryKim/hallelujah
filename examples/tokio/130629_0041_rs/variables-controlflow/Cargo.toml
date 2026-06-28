@@ -1,0 +1,37 @@
+[package]
+name = "variables_controlflow"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rand = "0.8"
+
+[[example]]
+name = "01_let_mut_const"
+
+[[example]]
+name = "02_scalar_types"
+
+[[example]]
+name = "03_compound_types"
+
+[[example]]
+name = "04_shadowing"
+
+[[example]]
+name = "05_if_else"
+
+[[example]]
+name = "06_loops"
+
+[[example]]
+name = "07_match_patterns"
+
+[[example]]
+name = "08_fibonacci"
+
+[[example]]
+name = "09_temperature_converter"
+
+[[example]]
+name = "10_type_inference"

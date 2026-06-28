@@ -1,0 +1,20 @@
+[package]
+name = "mutex_semaphore_monitor"
+version = "0.1.0"
+edition = "2021"
+description = "Rust syntax examples: Mutex, Semaphore, and Monitor (Mutex + Condvar)"
+
+[[example]]
+name = "01_mutex_basics"
+
+[[example]]
+name = "02_mutex_poison"
+
+[[example]]
+name = "03_semaphore"
+
+[[example]]
+name = "04_monitor_condvar"
+
+[[example]]
+name = "05_monitor_bounded_buffer"

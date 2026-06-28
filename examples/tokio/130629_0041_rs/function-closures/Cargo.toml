@@ -1,0 +1,36 @@
+[package]
+name = "function_closures"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+
+[[example]]
+name = "01_functions_basics"
+
+[[example]]
+name = "02_expressions_statements"
+
+[[example]]
+name = "03_closures_basics"
+
+[[example]]
+name = "04_fn_traits"
+
+[[example]]
+name = "05_move_closures"
+
+[[example]]
+name = "06_iterators_basics"
+
+[[example]]
+name = "07_iterator_adapters"
+
+[[example]]
+name = "08_higher_order_functions"
+
+[[example]]
+name = "09_factorial"
+
+[[example]]
+name = "10_fold_and_scan"

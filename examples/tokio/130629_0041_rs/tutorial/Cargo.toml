@@ -1,0 +1,98 @@
+﻿[package]
+name = "glory-tutorial"
+version = "0.1.0"
+edition = "2021"
+description = "Rust syntax tutorial — 30 standalone runnable examples"
+
+[dependencies]
+
+[[example]]
+name = "01_hello_world"
+
+[[example]]
+name = "02_variables"
+
+[[example]]
+name = "03_basic_types"
+
+[[example]]
+name = "04_operators"
+
+[[example]]
+name = "05_functions"
+
+[[example]]
+name = "06_if_else"
+
+[[example]]
+name = "07_loops"
+
+[[example]]
+name = "08_ownership"
+
+[[example]]
+name = "09_borrowing"
+
+[[example]]
+name = "10_struct_basic"
+
+[[example]]
+name = "11_enum_match"
+
+[[example]]
+name = "12_pattern_matching"
+
+[[example]]
+name = "13_vec_slice"
+
+[[example]]
+name = "14_option_result"
+
+[[example]]
+name = "15_string_str"
+
+[[example]]
+name = "16_traits"
+
+[[example]]
+name = "17_generics"
+
+[[example]]
+name = "18_lifetimes"
+
+[[example]]
+name = "19_modules"
+
+[[example]]
+name = "20_iterators_closures"
+
+[[example]]
+name = "21_threads"
+
+[[example]]
+name = "22_mpsc_channel"
+
+[[example]]
+name = "23_arc_mutex"
+
+[[example]]
+name = "24_rc_refcell"
+
+[[example]]
+name = "25_trait_objects"
+
+[[example]]
+name = "26_custom_iterator"
+
+[[example]]
+name = "27_error_handling_io"
+
+[[example]]
+name = "28_macro_rules"
+
+[[example]]
+name = "29_box_recursive_list"
+
+[[example]]
+name = "30_state_machine"
+

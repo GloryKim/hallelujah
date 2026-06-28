@@ -1,0 +1,13 @@
+[package]
+name = "datatypes"
+version = "0.1.0"
+edition = "2021"
+description = "Early Rust scalar type examples"
+
+[dependencies]
+
+[[example]]
+name = "datatype1"
+
+[[example]]
+name = "datatype2"

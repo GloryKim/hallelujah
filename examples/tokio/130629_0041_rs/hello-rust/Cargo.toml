@@ -1,0 +1,25 @@
+[package]
+name = "hello_rust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4"
+
+[[example]]
+name = "01_hello_world"
+
+[[example]]
+name = "02_print_variants"
+
+[[example]]
+name = "03_data_types_intro"
+
+[[example]]
+name = "04_cargo_tools_demo"
+
+[[example]]
+name = "05_chrono_timestamp"
+
+[[example]]
+name = "06_compilation_model"
