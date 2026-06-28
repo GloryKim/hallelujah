@@ -8,7 +8,8 @@
     "build:sidecars": "./scripts/build-sidecars.sh",
     "build": "pnpm build:sidecars && pnpm --filter desktop tauri build",
     "check:ports": "node scripts/check-ports.mjs",
-    "generate": "node tools/sidecar-registry/generate.mjs"
+    "generate": "node tools/sidecar-registry/generate.mjs",
+    "example:cross-talk": "./examples/dev.sh"
   },
   "devDependencies": {
     "typescript": "^5.4.0",
