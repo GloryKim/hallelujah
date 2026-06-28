@@ -1,6 +1,6 @@
 # Sidecar Port Registry and Code Generation
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: `packages/contracts/ports.yaml` as the source of truth for generated sidecar metadata
 
 ---
@@ -15,7 +15,7 @@ Every sidecar must agree on:
 - **Health path** — endpoint Tauri uses for readiness probes
 - **Binary name** — Tauri `externalBin` base name (without target triple suffix)
 
-These values live in one file so generated Rust/TypeScript metadata and port-based helper scripts stay in sync. Service startup/build wiring and per-client `BASE` URLs are still maintained manually.
+These values live in a single file so that generated Rust/TypeScript metadata and port-based helper scripts stay in sync. Service startup/build wiring and per-client `BASE` URLs are still maintained manually.
 
 ---
 

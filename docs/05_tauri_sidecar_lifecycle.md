@@ -1,6 +1,6 @@
 # Tauri Sidecar Lifecycle
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: How the desktop shell spawns, probes, and communicates with sidecars
 
 ---
@@ -51,8 +51,8 @@ app.shell()
 
 Requirements:
 
-- Binary must exist at `binaries/sc-{name}-{target-triple}` (see `externalBin` in `tauri.conf.json`).
-- Capability `shell:allow-execute` must list each sidecar with `"sidecar": true`.
+- The binary must exist at `binaries/sc-{name}-{target-triple}` (see `externalBin` in `tauri.conf.json`).
+- The capability `shell:allow-execute` must list each sidecar with `"sidecar": true`.
 
 Each sidecar reads `SIDECAR_PORT` and binds to `127.0.0.1:<port>`.
 
@@ -60,7 +60,7 @@ Each sidecar reads `SIDECAR_PORT` and binds to `127.0.0.1:<port>`.
 
 ## 4. Dev Mode: Skip Spawn
 
-In development, `scripts/dev.sh` starts sidecars **from source** (`go run`, `cargo run`, etc.). Spawning stale or placeholder binaries would cause port conflicts.
+In development, `scripts/dev.sh` starts sidecars **from source** (using `go run`, `cargo run`, etc.). Spawning stale or placeholder binaries would cause port conflicts.
 
 `dev.sh` sets:
 

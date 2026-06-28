@@ -1,6 +1,6 @@
 # Development Workflow
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: `pnpm dev` orchestration and supporting scripts
 
 ---
@@ -49,7 +49,7 @@ Press **Ctrl+C** once to stop Tauri and all sidecars.
 | nest | `SIDECAR_PORT=7104 pnpm --filter nest-api dev` |
 | axum | `SIDECAR_PORT=7105 cargo run` |
 
-The service command list is still maintained manually in `scripts/dev.sh`; `ports.yaml` provides the ports, but it does not auto-register new services in the startup script.
+The service command list is currently maintained manually in `scripts/dev.sh`; `ports.yaml` provides the ports, but it does not auto-register new services in the startup script.
 
 ### FastAPI dependency bootstrap
 

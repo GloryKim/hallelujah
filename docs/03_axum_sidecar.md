@@ -1,13 +1,13 @@
 # Axum Sidecar — Rust HTTP Server
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: Adding `services/axum` as the fifth language sidecar in the Hallelujah monorepo
 
 ---
 
 ## 1. Overview
 
-The Axum sidecar (`sc-axum`) is a standalone Rust HTTP server that follows the same contract as the other sidecars (Gin, Express, FastAPI, Nest). It binds to `127.0.0.1` and exposes:
+The Axum sidecar (`sc-axum`) is a standalone Rust HTTP server that follows the same contract as the other sidecars (Gin, Express, FastAPI, Nest). It binds to `127.0.0.1` and exposes the following endpoints:
 
 | Endpoint | Response |
 |----------|----------|
@@ -99,4 +99,4 @@ Axum can run inside the Tauri Rust process (same-process localhost server). This
 - Rust HTTP can be studied independently, like Go/Python/Node sidecars
 - Build and lifecycle match `externalBin` + shell spawn conventions
 
-For embedded Axum inside `src-tauri/`, see `01_tauri_learning_stack_report.md` Pattern B.
+For an embedded Axum server inside `src-tauri/`, see `01_tauri_learning_stack_report.md` Pattern B.

@@ -1,6 +1,6 @@
 # CORS and WebView Fetch
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: Why sidecars appeared offline in the UI while `curl` worked, and how CORS was fixed
 
 ---

@@ -1,6 +1,6 @@
 # Sidecar API Contract
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: Shared HTTP contract every sidecar must implement
 
 ---

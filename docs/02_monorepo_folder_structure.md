@@ -1,6 +1,6 @@
 # Tauri + Multi-Sidecar Monorepo Folder Structure Guide
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Audience: A project where a Tauri desktop app communicates with **continuously growing sidecars** such as Go (Gin), JS (Express), Python (FastAPI), TS (NestJS + React), and Rust (Axum)
 
 ---

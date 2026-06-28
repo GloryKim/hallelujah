@@ -1,7 +1,7 @@
 # Tauri App Learning Stack Research Report
 
-> Date: 2026-06-28  
-> Purpose: Document whether React, Express, Tokio, Axum, and similar technologies can be studied together in a Tauri app (frontend TS + backend RS), whether other web servers and examples can keep being added, and what problems that may cause
+> Date: 2026-06-29  
+> Purpose: Document whether React, Express, Tokio, Axum, and similar technologies can be studied together in a Tauri app (frontend TS + backend RS), whether other web servers and examples can be continuously added, and what problems that may cause
 
 ---
 
@@ -230,7 +230,7 @@ For **learning and experimentation**, keeping multiple example folders and rotat
 
 #### 7) Broken types/builds when merging example code as-is
 
-- Standalone Axum server examples often use `#[tokio::main]` in `main.rs` → conflicts with Tauri `main`/`lib` structure.
+- Standalone Axum server examples often use `#[tokio::main]` in `main.rs` → conflicts with Tauri's `main`/`lib` structure.
 - Standalone React examples use Node APIs → runtime errors in the Tauri WebView.
 
 **Recommendation:** keep examples in `examples/` or separate crates/workspaces, and **migrate only what you need** into the Tauri app.
@@ -286,12 +286,12 @@ This order lets you grow React/TS/Rust/Tokio/Axum naturally around one Tauri app
 
 ## 8. Final Answers (by question)
 
-### Q1. Can I study React and Express on the frontend TS side?
+### Q1. Can I study React and Express in the frontend TS environment?
 
 - **React + TypeScript:** Yes. This is the standard Tauri frontend path and is supported by official templates.
 - **Express:** Not inside frontend code, because there is no Node runtime. Express can be studied in (1) a separate Node project, or (2) integrated via a sidecar next to Tauri.
 
-### Q2. Can I study Tokio, Axum, and Rust syntax on the backend RS side?
+### Q2. Can I study Tokio, Axum, and Rust syntax in the backend RS environment?
 
 - **Yes.** `src-tauri` is the Rust learning space.
 - Tokio is already used by Tauri, so practice async Rust with commands and spawn.

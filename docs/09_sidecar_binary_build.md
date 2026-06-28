@@ -1,6 +1,6 @@
 # Sidecar Binary Build and Packaging
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: How each language sidecar is compiled into a Tauri `externalBin` artifact
 
 ---

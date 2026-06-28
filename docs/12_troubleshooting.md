@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: Common development issues and how to resolve them
 
 ---

@@ -1,6 +1,6 @@
 # Documentation Index
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Hallelujah monorepo — Tauri desktop app with multi-language sidecars
 
 ---

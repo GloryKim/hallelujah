@@ -1,6 +1,6 @@
 # API Client Package (`@hallelujah/api-client`)
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: Shared TypeScript HTTP clients for calling sidecars from the React layer
 
 ---

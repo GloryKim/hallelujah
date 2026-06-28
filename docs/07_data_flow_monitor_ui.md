@@ -1,6 +1,6 @@
 # Data Flow Monitor UI
 
-> Date: 2026-06-28  
+> Date: 2026-06-29  
 > Scope: React dashboard that visualizes communication between the WebView, Tauri, and sidecars
 
 ---
