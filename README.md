@@ -25,6 +25,12 @@ The React UI talks to sidecars over `127.0.0.1`, and to the Tauri shell over IPC
 
 Each sidecar implements `GET /health` and `GET /meta`, and binds to `127.0.0.1` only.
 
+## Examples
+
+The `examples/` directory holds **standalone, minimal(?) sample projects** — separate from the monorepo sidecars above. They are grouped by topic (e.g. `tokio/`, `axum/`, `express/`, `etc...`).
+
+More simple(?), focused example code will be added over time. Each entry is meant to illustrate one idea or pattern on its own, without the full Tauri + sidecar wiring.
+
 ## Quick start
 
 ```bash
