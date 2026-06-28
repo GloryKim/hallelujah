@@ -1,63 +1,55 @@
-import { useEffect, useState } from "react";
-import { ginClient, expressClient, fastapiClient, nestClient } from "@hallelujah/api-client";
-
-type ServiceStatus = "unknown" | "ok" | "error";
-
-interface SidecarState {
-  gin: ServiceStatus;
-  express: ServiceStatus;
-  fastapi: ServiceStatus;
-  nest: ServiceStatus;
-}
+import { ArchitectureDiagram } from "../components/ArchitectureDiagram";
+import { SidecarGrid } from "../components/SidecarGrid";
+import { TrafficLog } from "../components/TrafficLog";
+import { useDataFlow } from "../hooks/useDataFlow";
+import "./App.css";
 
 export function App() {
-  const [status, setStatus] = useState<SidecarState>({
-    gin: "unknown",
-    express: "unknown",
-    fastapi: "unknown",
-    nest: "unknown",
-  });
+  const { sidecars, traffic, tauriHealth, lastTauriProbeAt, activePulse, probeAll } =
+    useDataFlow();
 
-  useEffect(() => {
-    async function pollAll() {
-      const probe = async (
-        key: keyof SidecarState,
-        fn: () => Promise<{ ok: boolean }>
-      ) => {
-        try {
-          const res = await fn();
-          setStatus((prev) => ({ ...prev, [key]: res.ok ? "ok" : "error" }));
-        } catch {
-          setStatus((prev) => ({ ...prev, [key]: "error" }));
-        }
-      };
-
-      await Promise.allSettled([
-        probe("gin", ginClient.health),
-        probe("express", expressClient.health),
-        probe("fastapi", fastapiClient.health),
-        probe("nest", nestClient.health),
-      ]);
-    }
-
-    pollAll();
-    const id = setInterval(pollAll, 5000);
-    return () => clearInterval(id);
-  }, []);
-
-  const dot = (s: ServiceStatus) =>
-    s === "ok" ? "🟢" : s === "error" ? "🔴" : "⚪";
+  const online = sidecars.filter((s) => s.status === "ok").length;
 
   return (
-    <div style={{ fontFamily: "monospace", padding: "2rem" }}>
-      <h1>Hallelujah</h1>
-      <h2>Sidecar Status</h2>
-      <ul>
-        <li>{dot(status.gin)} gin (7101)</li>
-        <li>{dot(status.express)} express (7102)</li>
-        <li>{dot(status.fastapi)} fastapi (7103)</li>
-        <li>{dot(status.nest)} nest (7104)</li>
-      </ul>
+    <div className="app">
+      <header className="app-header">
+        <div>
+          <p className="eyebrow">Hallelujah Desktop</p>
+          <h1>Data Flow Monitor</h1>
+          <p className="subtitle">
+            Visualizes HTTP calls from React and IPC probes through the Tauri shell
+          </p>
+        </div>
+        <div className="header-actions">
+          <div className="stat-pill">
+            <span className="stat-value">
+              {online}/{sidecars.length}
+            </span>
+            <span className="stat-label">sidecars online</span>
+          </div>
+          {lastTauriProbeAt != null && (
+            <div className="stat-pill muted-pill">
+              <span className="stat-value">
+                {new Date(lastTauriProbeAt).toLocaleTimeString()}
+              </span>
+              <span className="stat-label">last Tauri probe</span>
+            </div>
+          )}
+          <button type="button" className="probe-btn" onClick={() => probeAll()}>
+            Probe now
+          </button>
+        </div>
+      </header>
+
+      <main className="app-main">
+        <div className="main-left">
+          <ArchitectureDiagram sidecars={sidecars} activePulse={activePulse} />
+          <SidecarGrid sidecars={sidecars} tauriHealth={tauriHealth} />
+        </div>
+        <div className="main-right">
+          <TrafficLog events={traffic} />
+        </div>
+      </main>
     </div>
   );
 }

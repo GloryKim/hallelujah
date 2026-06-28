@@ -9,3 +9,9 @@ export type { HealthResponse as FastApiHealthResponse, MetaResponse as FastApiMe
 
 export { nestClient } from "./nest.js";
 export type { HealthResponse as NestHealthResponse, MetaResponse as NestMetaResponse } from "./nest.js";
+
+export { axumClient } from "./axum.js";
+export type { HealthResponse as AxumHealthResponse, MetaResponse as AxumMetaResponse } from "./axum.js";
+
+export { SIDECAR_PORTS } from "./constants.js";
+export type { SidecarId } from "./constants.js";

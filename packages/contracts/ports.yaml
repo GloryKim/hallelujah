@@ -22,3 +22,9 @@ services:
     port: 7104
     healthPath: /health
     binaryName: sc-nest
+
+  axum:
+    id: sc-axum
+    port: 7105
+    healthPath: /health
+    binaryName: sc-axum

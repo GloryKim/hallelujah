@@ -20,5 +20,8 @@ echo "[build-sidecars] building fastapi..."
 echo "[build-sidecars] building nest..."
 (cd "$ROOT/services/nest" && node scripts/build-sidecar.mjs)
 
+echo "[build-sidecars] building axum..."
+(cd "$ROOT/services/axum" && make build-sidecar)
+
 echo "[build-sidecars] done. Artifacts:"
 ls -lh "$BIN_DIR"

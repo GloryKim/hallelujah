@@ -12,10 +12,17 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .setup(|app| {
-            let handle = app.handle().clone();
-            tauri::async_runtime::spawn(async move {
-                sidecar::spawn::spawn_all(&handle, &SIDECARS).await;
-            });
+            // In dev, scripts/dev.sh starts sidecars from source — skip binary spawn
+            // to avoid port conflicts with placeholder or stale binaries.
+            let skip_spawn = std::env::var("TAURI_SKIP_SIDECAR_SPAWN").is_ok();
+            if !skip_spawn {
+                let handle = app.handle().clone();
+                tauri::async_runtime::spawn(async move {
+                    sidecar::spawn::spawn_all(&handle, &SIDECARS).await;
+                });
+            } else {
+                println!("[sidecar] spawn skipped (TAURI_SKIP_SIDECAR_SPAWN)");
+            }
             Ok(())
         })
         .on_window_event(|_window, event| {

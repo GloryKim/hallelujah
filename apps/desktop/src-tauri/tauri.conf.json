@@ -30,7 +30,8 @@
       "binaries/sc-gin",
       "binaries/sc-express",
       "binaries/sc-fastapi",
-      "binaries/sc-nest"
+      "binaries/sc-nest",
+      "binaries/sc-axum"
     ]
   }
 }
