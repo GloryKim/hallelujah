@@ -2,10 +2,13 @@
 name = "tokio_example"
 version = "0.1.0"
 edition = "2021"
-description = "10 beginner Tokio examples — async/await, spawn, timer, channel"
+description = "Tokio examples — beginner, intermediate, and advanced async patterns"
 
 [dependencies]
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "time", "sync"] }
+bytes = "1"
+futures-util = { version = "0.3", default-features = false, features = ["sink"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "time", "sync", "net", "io-util", "fs", "process", "signal"] }
+tokio-util = { version = "0.7", features = ["codec", "rt"] }
 
 [[example]]
 name = "01_hello_async"
@@ -36,3 +39,63 @@ name = "09_spawn_blocking"
 
 [[example]]
 name = "10_async_mutex"
+
+[[example]]
+name = "11_broadcast_channel"
+
+[[example]]
+name = "12_watch_channel"
+
+[[example]]
+name = "13_rwlock_shared_cache"
+
+[[example]]
+name = "14_semaphore_limit"
+
+[[example]]
+name = "15_join_set"
+
+[[example]]
+name = "16_try_join"
+
+[[example]]
+name = "17_task_cancellation"
+
+[[example]]
+name = "18_notify_condition"
+
+[[example]]
+name = "19_barrier_sync"
+
+[[example]]
+name = "20_tcp_echo"
+
+[[example]]
+name = "21_graceful_shutdown"
+
+[[example]]
+name = "22_tcp_chat_server"
+
+[[example]]
+name = "23_worker_pool_backpressure"
+
+[[example]]
+name = "24_task_supervisor"
+
+[[example]]
+name = "25_cancellation_token_tree"
+
+[[example]]
+name = "26_rate_limited_gateway"
+
+[[example]]
+name = "27_async_file_processor"
+
+[[example]]
+name = "28_framed_protocol"
+
+[[example]]
+name = "29_async_process_pipeline"
+
+[[example]]
+name = "30_production_tcp_server"
